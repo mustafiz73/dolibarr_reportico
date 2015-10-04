@@ -2,6 +2,7 @@
 /* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2015      Patrick Delcroix        <pmpdelcroix@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +47,7 @@ class modreportico extends DolibarrModules
 
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-		$this->numero = 861002;
+		$this->numero = 861003;
 		// Key text used to identify module (for permissions, menus, etc...)
 		$this->rights_class = 'reportico';
 
@@ -56,9 +57,9 @@ class modreportico extends DolibarrModules
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
 		$this->name = preg_replace('/^mod/i','',get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
-		$this->description = "reportico view";
+		$this->description = "reportico";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
-		$this->version = '1.4';
+		$this->version = '4.3_dev';
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		// Where to store the module in setup page (0=common,1=interface,2=others,3=very specific)
@@ -94,7 +95,7 @@ class modreportico extends DolibarrModules
 		$this->dirs = array();
 
 		// Config pages. Put here list of php page, stored into mymodule/admin directory, to use to setup module.
-		$this->config_page_url = array("reporticosetup.php@reportico");
+		//$this->config_page_url = array("reporticosetup.php@reportico");
 
 		// Dependencies
 		$this->hidden = false;			// A condition to hide module
@@ -173,13 +174,21 @@ class modreportico extends DolibarrModules
 
 		// Add here list of permission defined by an id, a label, a boolean and two constant strings.
 		// Example:
-		// $this->rights[$r][0] = 2000; 				// Permission id (must not be already used)
-		// $this->rights[$r][1] = 'Permision label';	// Permission label
-		// $this->rights[$r][3] = 1; 					// Permission by default for new user (0/1)
+		 //$this->rights[$r][0] = 86100301; 				// Permission id (must not be already used)
+		 //$this->rights[$r][1] = 'reportico admin';	// Permission label
+		 //$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
 		// $this->rights[$r][4] = 'level1';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
 		// $this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
 		// $r++;
 
+		// Add here list of permission defined by an id, a label, a boolean and two constant strings.
+		// Example:
+		// $this->rights[$r][0] = 86100302; 				// Permission id (must not be already used)
+		// $this->rights[$r][1] = 'reportico viewer';	// Permission label
+		// $this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
+		// $this->rights[$r][4] = 'level1';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		// $this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		// $r++;
 
 		// Main menu entries
 		$this->menu = array();			// List of menus to add
@@ -208,7 +217,7 @@ class modreportico extends DolibarrModules
 									'titre'=>'reportico',
 									'mainmenu'=>'reportico',
                                                                         'leftmenu'=>'reportico',
-									'url'=>'/reportico/run.php',
+									'url'=>'/reportico/run_ajax.php',
 									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 									'position'=>100,
 									'enabled'=>'$conf->reportico->enabled',  // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
@@ -251,6 +260,7 @@ class modreportico extends DolibarrModules
 		$result=$this->_load_tables('/reportico/sql/');
 
 		return $this->_init($sql, $options);
+		
 	}
 
 	/**
