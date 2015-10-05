@@ -28,6 +28,25 @@
  * @license - http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  * @version $Id: run.php,v 1.25 2014/05/17 15:12:31 peter Exp $
  */
+global $dolibarr_main_db_user;
+global $dolibarr_main_db_pass;
+global $dolibarr_main_db_name;
+global $dolibarr_main_db_host;
+global $dolibarr_main_db_type;
+
+if (!isset($dolibarr_main_db_pass))
+{
+$res=0;
+if (! $res && file_exists("../filefunc.inc.php")) $res=@require_once '../filefunc.inc.php';	
+if (! $res && file_exists("../../filefunc.inc.php")) $res=@require_once '../../filefunc.inc.php';
+if (! $res && file_exists("../../../filefunc.inc.php")) $res=@require_once '../../../filefunc.inc.php';
+if (! $res && file_exists("../../../../filefunc.inc.php")) $res=@require_once '../../../../filefunc.inc.php';
+if (! $res && file_exists("../../../../../filefunc.inc.php")) $res=@require_once '../../../../filefunc.inc.php';
+if (! $res && file_exists("../../../../../../filefunc.inc.php")) $res=@require_once '../../../../filefunc.inc.php';
+if(strpos($_SERVER['PHP_SELF'], 'dolibarr_min')>0 && !$res && file_exists("/var/www/dolibarr_min/htdocs/filefunc.inc.php")) $res=@require_once "/var/www/dolibarr_min/htdocs/filefunc.inc.php";    
+else if(!$res && file_exists("/var/www/dolibarr/htdocs/filefunc.inc.php")) $res=@require_once "/var/www/dolibarr/htdocs/filefunc.inc.php";    
+if (! $res) die("Include of filefunc fails");
+}
 
     // set error reporting level
 	error_reporting(E_ALL);
@@ -57,7 +76,7 @@
     // Specify any URL parameters that should be added into any links generated in Reportico.
     // Useful when embedding in another application or frameworks where requests need to be channelled
     // back though themselves
-	//$q->forward_url_get_parameters = "";
+	$q->forward_url_get_parameters = "mainmenu=tools&leftmenu=reportico";
 
     // Reportico Ajax mode. If set to true will run all reportico requests from buttons and links
     // through AJAX, meaning reportico will refresh in its own window and not refresh the whole page
@@ -167,7 +186,7 @@
     //$q->show_refresh_button = false;
 
     // Set to true if you are embedding in another report
-    //$q->embedded_report = false;
+    $q->embedded_report = true;
 
     // Set to true if you want to clear the report session whenever you call this script
     // $q->clear_reportico_session = true;
@@ -179,11 +198,16 @@
     // If you want to connect to a reporting database whose connection information is available in the calling
     // script, then you should configure your project connection type to "framework" using the configure project link
     //and then you can pass your connection info here
-    //define('SW_FRAMEWORK_DB_DRIVER','pdo_mysql');
-    //define('SW_FRAMEWORK_DB_USER', '<USER>');
-    //define('SW_FRAMEWORK_DB_PASSWORD','PASSWORD');
-    //define('SW_FRAMEWORK_DB_HOST', '127.0.0.1'); // Use ip:port to specifiy a non standard port
-    //define('SW_FRAMEWORK_DB_DATABASE', '<DATABASENAME>');
+	define('SW_DB_TYPE','framework');
+if($dolibarr_main_db_type=='mysqli' || $dolibarr_main_db_type=='mysql' ){
+	define('SW_FRAMEWORK_DB_DRIVER', 'pdo_mysql');
+}else{
+	define('SW_FRAMEWORK_DB_DRIVER', 'none');
+}
+    define('SW_FRAMEWORK_DB_USER', $dolibarr_main_db_user);
+    //define('SW_FRAMEWORK_DB_PASSWORD',$dolibarr_main_db_pass);
+    define('SW_FRAMEWORK_DB_HOST', $dolibarr_main_db_host); // Use ip:port to specifiy a non standard port
+    define('SW_FRAMEWORK_DB_DATABASE', $dolibarr_main_db_name);
 
     // For passing external user parameters, can be referenced in SQL with {USER_PARAM,parameter_name}
     // and can be referenced in custom SQL with $this->user_parameters
@@ -196,12 +220,12 @@
     // Set bootstrap_styles to false for reportico classic styles, or "3" for bootstrap 3 look and feel and 2 for bootstrap 2
     // If you are embedding reportico and you have already loaded bootstrap then set bootstrap_preloaded equals true so reportico
     // doestnt load it again.
-    //$q->bootstrap_styles = "3";
+    //$q->bootstrap_styles = false;
     //$q->bootstrap_preloaded = false;
 
     // In bootstrap enable pages, the bootstrap modal is by default used for the quick edit buttons
     // but they can be ignored and reportico's own modal invoked by setting this to true
-    //$q->force_reportico_mini_maintains = false;
+   // $q->force_reportico_mini_maintains = true;
 
     // Engine to use for charts .. 
     // HTML reports can use javascript charting, PDF reports must use PCHART
