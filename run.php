@@ -33,20 +33,19 @@ global $dolibarr_main_db_pass;
 global $dolibarr_main_db_name;
 global $dolibarr_main_db_host;
 global $dolibarr_main_db_type;
+global $user;
 
-if (!isset($dolibarr_main_db_pass))
-{
 $res=0;
-if (! $res && file_exists("../filefunc.inc.php")) $res=@require_once '../filefunc.inc.php';	
-if (! $res && file_exists("../../filefunc.inc.php")) $res=@require_once '../../filefunc.inc.php';
-if (! $res && file_exists("../../../filefunc.inc.php")) $res=@require_once '../../../filefunc.inc.php';
-if (! $res && file_exists("../../../../filefunc.inc.php")) $res=@require_once '../../../../filefunc.inc.php';
-if (! $res && file_exists("../../../../../filefunc.inc.php")) $res=@require_once '../../../../filefunc.inc.php';
-if (! $res && file_exists("../../../../../../filefunc.inc.php")) $res=@require_once '../../../../filefunc.inc.php';
-if(strpos($_SERVER['PHP_SELF'], 'dolibarr_min')>0 && !$res && file_exists("/var/www/dolibarr_min/htdocs/filefunc.inc.php")) $res=@require_once "/var/www/dolibarr_min/htdocs/filefunc.inc.php";    
-else if(!$res && file_exists("/var/www/dolibarr/htdocs/filefunc.inc.php")) $res=@require_once "/var/www/dolibarr/htdocs/filefunc.inc.php";    
+if (! $res && file_exists("../master.inc.php")) $res=@require_once '../master.inc.php';	
+if (! $res && file_exists("../../master.inc.php")) $res=@require_once '../../master.inc.php';
+if (! $res && file_exists("../../../master.inc.php")) $res=@require_once '../../../master.inc.php';
+if (! $res && file_exists("../../../../master.inc.php")) $res=@require_once '../../../../master.inc.php';
+if (! $res && file_exists("../../../../../master.inc.php")) $res=@require_once '../../../../master.inc.php';
+if (! $res && file_exists("../../../../../../master.inc.php")) $res=@require_once '../../../../master.inc.php';
+if(strpos($_SERVER['PHP_SELF'], 'dolibarr_min')>0 && !$res && file_exists("/var/www/dolibarr_min/htdocs/master.inc.php")) $res=@require_once "/var/www/dolibarr_min/htdocs/master.inc.php";    
+else if(!$res && file_exists("/var/www/dolibarr/htdocs/master.inc.php")) $res=@require_once "/var/www/dolibarr/htdocs/master.inc.php";    
 if (! $res) die("Include of filefunc fails");
-}
+
 
     // set error reporting level
 	error_reporting(E_ALL);
@@ -76,11 +75,11 @@ if (! $res) die("Include of filefunc fails");
     // Specify any URL parameters that should be added into any links generated in Reportico.
     // Useful when embedding in another application or frameworks where requests need to be channelled
     // back though themselves
-	$q->forward_url_get_parameters = "mainmenu=tools&leftmenu=reportico";
+	//$q->forward_url_get_parameters = "mainmenu=tools&leftmenu=reportico";
 
     // Reportico Ajax mode. If set to true will run all reportico requests from buttons and links
     // through AJAX, meaning reportico will refresh in its own window and not refresh the whole page
-    //$q->reportico_ajax_mode = true;
+    $q->reportico_ajax_mode = false;
 
     /*
     ** Initial execution states .. allows you to start user and limit user to specfic
@@ -142,7 +141,15 @@ if (! $res) die("Include of filefunc fails");
 
 
     // Default initial execute mode to single report output if REPORTOUTPUT mode specified
-    if ( $q->access_mode == "REPORTOUTPUT" )
+    if($user->rights->reportico->reporticoAdmin==1){
+  	$q->access_mode == "FULL";
+    }else if($user->rights->reportico->reporticoUser==1){
+	$q->access_mode == "ALLPROJECTS";
+    }else{
+	$q->access_mode == "REPORTOUTPUT";
+    }
+
+	if ( $q->access_mode == "REPORTOUTPUT" )
         $q->initial_execute_mode = "EXECUTE";
 
 
@@ -189,7 +196,8 @@ if (! $res) die("Include of filefunc fails");
     $q->embedded_report = true;
 
     // Set to true if you want to clear the report session whenever you call this script
-    // $q->clear_reportico_session = true;
+	
+	$q->clear_reportico_session = isset($_GET['reset']);
 
     // Specify an alternative AJAX runner from the stanfdard run.php
     //$q->reportico_ajax_script_url = $_SERVER["SCRIPT_NAME"];
@@ -198,14 +206,15 @@ if (! $res) die("Include of filefunc fails");
     // If you want to connect to a reporting database whose connection information is available in the calling
     // script, then you should configure your project connection type to "framework" using the configure project link
     //and then you can pass your connection info here
-	define('SW_DB_TYPE','framework');
+	
 if($dolibarr_main_db_type=='mysqli' || $dolibarr_main_db_type=='mysql' ){
 	define('SW_FRAMEWORK_DB_DRIVER', 'pdo_mysql');
 }else{
 	define('SW_FRAMEWORK_DB_DRIVER', 'none');
 }
     define('SW_FRAMEWORK_DB_USER', $dolibarr_main_db_user);
-    //define('SW_FRAMEWORK_DB_PASSWORD',$dolibarr_main_db_pass);
+    define('SW_FRAMEWORK_DB_PASSWORD',$dolibarr_main_db_pass);
+//    define('SW_ADMIN_PASSWORD',$dolibarr_main_db_pass);
     define('SW_FRAMEWORK_DB_HOST', $dolibarr_main_db_host); // Use ip:port to specifiy a non standard port
     define('SW_FRAMEWORK_DB_DATABASE', $dolibarr_main_db_name);
 
@@ -240,8 +249,8 @@ if($dolibarr_main_db_type=='mysqli' || $dolibarr_main_db_type=='mysql' ){
     // $q->dynamic_grids_page_size = 10;
 
     // Show or hide various report elements
-    //$q->output_template_parameters["show_hide_navigation_menu"] = "show";
-    //$q->output_template_parameters["show_hide_dropdown_menu"] = "show";
+    $q->output_template_parameters["show_hide_navigation_menu"] = "hide";
+    $q->output_template_parameters["show_hide_dropdown_menu"] = "hide";
     //$q->output_template_parameters["show_hide_report_output_title"] = "show";
     //$q->output_template_parameters["show_hide_prepare_section_boxes"] = "show";
     //$q->output_template_parameters["show_hide_prepare_pdf_button"] = "show";
