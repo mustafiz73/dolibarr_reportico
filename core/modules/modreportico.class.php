@@ -174,21 +174,21 @@ class modreportico extends DolibarrModules
 
 		// Add here list of permission defined by an id, a label, a boolean and two constant strings.
 		// Example:
-		 //$this->rights[$r][0] = 86100301; 				// Permission id (must not be already used)
-		 //$this->rights[$r][1] = 'reportico admin';	// Permission label
-		 //$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		// $this->rights[$r][4] = 'level1';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		// $this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		// $r++;
+		 $this->rights[$r][0] = 86100301; 				// Permission id (must not be already used)
+		 $this->rights[$r][1] = 'reporticoUser';	// Permission label
+		 $this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
+		 $this->rights[$r][4] = 'user';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		 //$this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		 $r++;
 
-		// Add here list of permission defined by an id, a label, a boolean and two constant strings.
-		// Example:
-		// $this->rights[$r][0] = 86100302; 				// Permission id (must not be already used)
-		// $this->rights[$r][1] = 'reportico viewer';	// Permission label
-		// $this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		// $this->rights[$r][4] = 'level1';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		// $this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		// $r++;
+// user 
+		 $this->rights[$r][0] = 86100302; 				
+		 $this->rights[$r][1] = 'reporticoAdmin';	
+		 $this->rights[$r][3] = 0; 					
+		 $this->rights[$r][4] = 'user';				
+		 $this->rights[$r][5] = 'admin';				
+		 $r++;
+
 
 		// Main menu entries
 		$this->menu = array();			// List of menus to add
@@ -217,11 +217,11 @@ class modreportico extends DolibarrModules
 									'titre'=>'reportico',
 									'mainmenu'=>'tools',
                                                                         'leftmenu'=>'reportico',
-									'url'=>'/reportico/run_ajax.php',
+									'url'=>'/reportico/run_ajax.php?execute_mode=MENU',
 									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 									'position'=>100,
 									'enabled'=>'$conf->reportico->enabled',  // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-									'perms'=>'1',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+									'perms'=>'$user->rights->reportico->user',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 									'target'=>'',
 									'user'=>2);
               $r++;
@@ -234,7 +234,20 @@ class modreportico extends DolibarrModules
 									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 									'position'=>110,
 									'enabled'=>'$conf->reportico->enabled',  // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-									'perms'=>'1',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+									'perms'=>'$user->rights->reportico->user->admin',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+									'target'=>'',
+									'user'=>2);
+              $r++;
+	      $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=tools,fk_leftmenu=reportico',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+									'type'=>'left',			                // This is a Left menu entry
+									'titre'=>'createProject',
+									'mainmenu'=>'tools',
+                                                                        'leftmenu'=>'reportico',
+									'url'=>'/reportico/run_ajax.php?execute_mode=PREPARE&xmlin=createproject',
+									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+									'position'=>120,
+									'enabled'=>'$conf->reportico->enabled',  // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+									'perms'=>'$user->rights->reportico->user->admin',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 									'target'=>'',
 									'user'=>2);
               $r++;
