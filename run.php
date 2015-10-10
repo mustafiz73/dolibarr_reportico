@@ -130,6 +130,17 @@ if (! $res) die("Include of filefunc fails");
     // ONEREPORT - limits user to single report, crtieria entry and report execution ( requires initial project/report )
     // REPORTOUTPUT - executes a report and allows to "Return" button to crtieria entry ( requires initial project/report )
     //$q->access_mode = "<MODE>";
+    if(isset($user->rights->reportico->user->admin)){
+  	$q->access_mode = "FULL";
+	$q->login_type ="ADMIN";
+	set_reportico_session_param('admin_password',"1");
+	//$q->login_type =true;
+    }else if(isset($user->rights->reportico->user)){
+	$q->access_mode ="ALLPROJECTS";
+	//$q->admin_accessible = 
+    }else{
+	$q->access_mode = "REPORTOUTPUT";
+    }
 
     // Generate report definition from SQL  and set some column / report attributes
     // Also the full report definition can be built up programmatically
@@ -141,13 +152,7 @@ if (! $res) die("Include of filefunc fails");
 
 
     // Default initial execute mode to single report output if REPORTOUTPUT mode specified
-    if($user->rights->reportico->reporticoAdmin==1){
-  	$q->access_mode == "FULL";
-    }else if($user->rights->reportico->reporticoUser==1){
-	$q->access_mode == "ALLPROJECTS";
-    }else{
-	$q->access_mode == "REPORTOUTPUT";
-    }
+
 
 	if ( $q->access_mode == "REPORTOUTPUT" )
         $q->initial_execute_mode = "EXECUTE";
@@ -196,8 +201,12 @@ if (! $res) die("Include of filefunc fails");
     $q->embedded_report = true;
 
     // Set to true if you want to clear the report session whenever you call this script
-	
-	$q->clear_reportico_session = isset($_GET['reset']);
+	if (isset($_GET['reset'])){
+	$q->clear_reportico_session = true;
+	//header('Location: '.$_SERVER['PHP_SELF']);
+	}else{
+	$q->clear_reportico_session = false;
+	}
 
     // Specify an alternative AJAX runner from the stanfdard run.php
     //$q->reportico_ajax_script_url = $_SERVER["SCRIPT_NAME"];

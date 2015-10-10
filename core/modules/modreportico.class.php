@@ -197,27 +197,26 @@ class modreportico extends DolibarrModules
 		// Add here entries to declare new menus
 		//
 		// Example to declare a new Top Menu entry and its Left menu entry:
-		/*$this->menu[$r]=array(	'fk_menu'=>0,			                // Put 0 if this is a top menu
+		$this->menu[$r]=array(	'fk_menu'=>0,			                // Put 0 if this is a top menu
 									'type'=>'top',			                // This is a Top menu entry
-									'titre'=>'reportico',
+									'titre'=>'Reportico',
 									'mainmenu'=>'reportico',
-									'leftmenu'=>'reportico',
-									'url'=>'/reportico/reportico.php',
+									'url'=>'/reportico/run_ajax.php',
 									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 									'position'=>100,
 									'enabled'=>'$conf->reportico->enabled',	// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-									'perms'=>'1',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+									'perms'=>'$user->rights->reportico->user',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 									'target'=>'',
 									'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
-		 $r++;*/
+		 $r++;
 		//
 		// Example to declare a Left Menu entry into an existing Top menu entry:
-		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=tools',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=reportico',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 									'type'=>'left',			                // This is a Left menu entry
 									'titre'=>'reportico',
-									'mainmenu'=>'tools',
+									'mainmenu'=>'reportico',
                                                                         'leftmenu'=>'reportico',
-									'url'=>'/reportico/run_ajax.php?execute_mode=MENU',
+									'url'=>'/reportico/run_ajax.php?execute_mode=MENU&project=admin',
 									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 									'position'=>100,
 									'enabled'=>'$conf->reportico->enabled',  // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
@@ -225,27 +224,14 @@ class modreportico extends DolibarrModules
 									'target'=>'',
 									'user'=>2);
               $r++;
-	      $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=tools,fk_leftmenu=reportico',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-									'type'=>'left',			                // This is a Left menu entry
-									'titre'=>'admin',
-									'mainmenu'=>'tools',
-                                                                        'leftmenu'=>'reportico',
-									'url'=>'/reportico/run_ajax.php?execute_mode=ADMIN',
-									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-									'position'=>110,
-									'enabled'=>'$conf->reportico->enabled',  // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-									'perms'=>'$user->rights->reportico->user->admin',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
-									'target'=>'',
-									'user'=>2);
-              $r++;
-	      $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=tools,fk_leftmenu=reportico',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+	      $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=reportico,fk_leftmenu=reportico',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 									'type'=>'left',			                // This is a Left menu entry
 									'titre'=>'createProject',
-									'mainmenu'=>'tools',
+									'mainmenu'=>'reportico',
                                                                         'leftmenu'=>'reportico',
 									'url'=>'/reportico/run_ajax.php?execute_mode=PREPARE&xmlin=createproject',
 									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-									'position'=>120,
+									'position'=>101,
 									'enabled'=>'$conf->reportico->enabled',  // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
 									'perms'=>'$user->rights->reportico->user->admin',			                // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 									'target'=>'',

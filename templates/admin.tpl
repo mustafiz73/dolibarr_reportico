@@ -140,7 +140,7 @@
 {if strlen($MAIN_MENU_URL)>0} 
 			<TD style="text-align:center">&nbsp;</TD>
 {/if}
-{if $SHOW_LOGOUT}
+{if $SHOW_LOGOUT==3}
 			<TD width="15%" align="right" class="swPrpTopMenuCell">
 				<input class="{$BOOTSTRAP_STYLE_ADMIN_BUTTON}swPrpSubmit reporticoSubmit" type="submit" name="adminlogout" value="{$T_LOGOFF}">
 			</TD>
