@@ -201,7 +201,7 @@ class modreportico extends DolibarrModules
 									'type'=>'top',			                // This is a Top menu entry
 									'titre'=>'Reportico',
 									'mainmenu'=>'reportico',
-									'url'=>'/reportico/run_ajax.php',
+									'url'=>'/reportico/exe.php',
 									'langs'=>'reportico@reportico',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 									'position'=>100,
 									'enabled'=>'$conf->reportico->enabled',	// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
@@ -211,7 +211,7 @@ class modreportico extends DolibarrModules
 		 $r++;
 		//
 		// Example to declare a Left Menu entry into an existing Top menu entry:
-		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=reportico',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+	/*	$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=reportico',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 									'type'=>'left',			                // This is a Left menu entry
 									'titre'=>'reportico',
 									'mainmenu'=>'reportico',
@@ -237,7 +237,7 @@ class modreportico extends DolibarrModules
 									'target'=>'',
 									'user'=>2);
               $r++;
-
+*/
 
 		// Exports
 		//$r=1;
